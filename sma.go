@@ -1,5 +1,6 @@
 package gma
 
+//SimpleMovingAverage is a struct that contains the moving average values and variables.
 type SimpleMovingAverage struct {
 	window     bool
 	windowSize int
@@ -7,8 +8,12 @@ type SimpleMovingAverage struct {
 	full       bool
 }
 
+//NewSimpleMovingAverage is the constructor for creating a new moving average. It takes
+//a windowSize for it's only parameter. If windowSize is not above 0, then the SMA will be
+//constructed with no window.
 func NewSimpleMovingAverage(windowSize int) SimpleMovingAverage {
 
+	//If window is a positive integer, create the struct with that size.
 	if windowSize > 0 {
 		return &SimpleMovingAverage{
 			window:     true,
@@ -16,6 +21,7 @@ func NewSimpleMovingAverage(windowSize int) SimpleMovingAverage {
 			values:     make([]float64, windowSize),
 			full:       false,
 		}
+		//If window size is 0 or undefined, create a windowless struct.
 	} else {
 		return &SimpleMovingAverage{
 			window:     false,
@@ -26,6 +32,7 @@ func NewSimpleMovingAverage(windowSize int) SimpleMovingAverage {
 	}
 }
 
+//Add will add the defined value to the moving average.
 func (sma *SimpleMovingAverage) Add(newValue float64) {
 
 	if window {
@@ -63,14 +70,19 @@ func (sma *SimpleMovingAverage) Value() float64 {
 	return value
 }
 
+//Full returns if the amount of values in the array matches the window.
+//It is recommended to check full before using the value, as it may be an unexpected value
+//If the array is not full yet.
 func (sma *SimpleMovingAverage) Full() bool {
 	return full
 }
 
+//Window returns whether or not this moving average has a window.
 func (sma *SimpleMovingAverage) Window() bool {
 	return window
 }
 
+//WindowSize returns the size of the window (or 0 if no window exists)
 func (sma *SimpleMovingAverage) WindowSize() int {
 	return windowSize
 }
