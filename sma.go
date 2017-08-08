@@ -15,15 +15,15 @@ func NewSimpleMovingAverage(windowSize int) SimpleMovingAverage {
 
 	//If window is a positive integer, create the struct with that size.
 	if windowSize > 0 {
-		return &SimpleMovingAverage{
+		return SimpleMovingAverage{
 			window:     true,
 			windowSize: windowSize,
-			values:     make([]float64, windowSize),
+			values:     make([]float64, 0),
 			full:       false,
 		}
 		//If window size is 0 or undefined, create a windowless struct.
 	} else {
-		return &SimpleMovingAverage{
+		return SimpleMovingAverage{
 			window:     false,
 			windowSize: 0,
 			values:     make([]float64, 0),
@@ -35,7 +35,7 @@ func NewSimpleMovingAverage(windowSize int) SimpleMovingAverage {
 //Add will add the defined value to the moving average.
 func (sma *SimpleMovingAverage) Add(newValue float64) {
 
-	if window {
+	if sma.window {
 		//If window is full, remove the first element, and add the new element to the end
 		if sma.full {
 			_, sma.values = sma.values[0], sma.values[1:]
@@ -46,7 +46,7 @@ func (sma *SimpleMovingAverage) Add(newValue float64) {
 			sma.values = append(sma.values, newValue)
 
 			//If the value array equals the window size, mark this as full.
-			if len(sma.values) == windowSize {
+			if len(sma.values) == sma.windowSize {
 				sma.full = true
 			}
 		}
@@ -61,11 +61,11 @@ func (sma *SimpleMovingAverage) Value() float64 {
 
 	var sum = float64(0)
 
-	for _, value = range values {
+	for _, value := range sma.values {
 		sum = sum + value
 	}
 
-	value := sum / float64(len(values))
+	value := sum / float64(len(sma.values))
 
 	return value
 }
@@ -74,15 +74,15 @@ func (sma *SimpleMovingAverage) Value() float64 {
 //It is recommended to check full before using the value, as it may be an unexpected value
 //If the array is not full yet.
 func (sma *SimpleMovingAverage) Full() bool {
-	return full
+	return sma.full
 }
 
 //Window returns whether or not this moving average has a window.
 func (sma *SimpleMovingAverage) Window() bool {
-	return window
+	return sma.window
 }
 
 //WindowSize returns the size of the window (or 0 if no window exists)
 func (sma *SimpleMovingAverage) WindowSize() int {
-	return windowSize
+	return sma.windowSize
 }
