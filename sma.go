@@ -62,7 +62,7 @@ func (sma *SimpleMovingAverage) Value() float64 {
 	var sum = float64(0)
 
 	for _, value := range sma.values {
-		sum = sum + value
+		sum += value
 	}
 
 	value := sum / float64(len(sma.values))
